@@ -1,10 +1,10 @@
-#userò un display da 20x4 caratteri per mostrare l'ultimore dal televideo
+#Userò un display da 20x4 caratteri per mostrare l'ultimore dal televideo
 import serial
 import feedparser
 from time import sleep
 
-i=0
-vfd=serial.Serial("/dev/ttyAMA1", baudrate=38400)
+#Nel mio caso, il display è collegato alla porta seriale /dev/ttyAMA2, debitamente abilitata
+vfd=serial.Serial("/dev/ttyAMA2", baudrate=38400)
 
 def comando (istruzione):
     ordine=[istruzione]
@@ -34,7 +34,7 @@ while True:
     if len(ultimora.entries)==0 :
         notizia="Errore di Rete"
     else:
-        lancio = ultimora.entries[i].description.replace('\n', ' ')
+        lancio = ultimora.entries[0].description.replace('\n', ' ')
         notizia = filtra_link(lancio)
     righe=[]
     while j < len (notizia):
