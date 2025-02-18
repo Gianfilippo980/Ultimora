@@ -1,16 +1,10 @@
 #userò un display da 20x4 caratteri per mostrare l'ultimore dal televideo
 import serial
-#import gpiozero
 import feedparser
 from time import sleep
 
 i=0
 vfd=serial.Serial("/dev/ttyAMA1", baudrate=38400)
-#busy=gpiozero.Button(25)
-
-#def Attesa ():
-#    busy.wait_for_release()
-#busy.when_pressed=Attesa
 
 def comando (istruzione):
     ordine=[istruzione]
@@ -23,6 +17,15 @@ def Trasmissione (righe):
         if isinstance(righe, list):
             sleep(0.1)
             
+def filtra_link(testo : str) -> str:
+    #Rimuove i link dal testo, alle volte presenti nel sommario sotto la forma di <a href="...">...</a>
+    if "<a" in testo:
+        inizio = testo.find("<a")
+        fine = testo.find(">", inizio)
+        testo = testo[:inizio] + testo[fine + 1:]
+        inizio = testo.find("</a>")
+        testo = testo[:inizio] + testo[inizio + 4:]
+    return testo
 
 while True:
     comando (12)
@@ -31,7 +34,8 @@ while True:
     if len(ultimora.entries)==0 :
         notizia="Errore di Rete"
     else:
-        notizia=ultimora.entries[i].description.replace('\n', ' ')
+        lancio = ultimora.entries[i].description.replace('\n', ' ')
+        notizia = filtra_link(lancio)
     righe=[]
     while j < len (notizia):
         testo=notizia[j:j+20]
