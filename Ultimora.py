@@ -19,12 +19,12 @@ def Trasmissione (righe):
             
 def filtra_link(testo : str) -> str:
     #Rimuove i link dal testo, alle volte presenti nel sommario sotto la forma di <a href="...">...</a>
-    if "<a" in testo:
+    while "<a" in testo:
         inizio = testo.find("<a")
         fine = testo.find(">", inizio)
         testo = testo[:inizio] + testo[fine + 1:]
         inizio = testo.find("</a>")
-        testo = testo[:inizio] + testo[inizio + 4:]
+        testo = testo[:inizio] + ' ' + testo[inizio + 4:]
     return testo
 
 while True:
